@@ -1,19 +1,17 @@
-import axios from "axios";
-import { useQuery } from "react-query";
-const fetchSuperHeroes = async () => {
-  const {data } = await axios.get("http://localhost:4000/superheroes");
-  return data
-};
+import { useSuperHeroesData } from "../hooks/useSuperHerosData";
+
 
 export const RQSuperHeroesPage = () => {
-  const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
-    "super-heroes",
-    fetchSuperHeroes, {
-      enabled: false
-    }
-  );
+  const onSuccess = (data) => {
+    console.log("Perform side effect after data fetching");
+  };
 
-  if (isLoading || isFetching) {
+  const onError = (error) => {
+    console.log("Perform side effect after encountering error");
+  };
+  const { isLoading, data, isError, error, isFetching, refetch } = useSuperHeroesData(onSuccess, onError)
+
+  if (isLoading) {
     return <h2>Loading...</h2>;
   }
 
@@ -23,10 +21,13 @@ export const RQSuperHeroesPage = () => {
   return (
     <>
       <h2>React Query Super Heroes Page</h2>
-      <button onClick={() => refetch()}>Refetch</button>
-      {data?.map((hero) => (
+      {/* {data?.map((hero) => (
         <div key={hero.id}>{hero.name}</div>
-      ))}
+      ))} */}
+
+      {data.map((heroName) => {
+        return <div key={heroName}>{heroName}</div>;
+      })}
     </>
   );
 };
