@@ -4,6 +4,7 @@ import {useParams} from 'react-router-dom'
 export const RQSuperHeroPage = () => {
   const { heroId } = useParams();
   const { isLoading, data, isError, error } = useSuperHeroData(heroId);
+  console.log(heroId)
   if (isLoading) {
     return <h2>Loading...</h2>;
   }
